@@ -4,7 +4,7 @@ Input Format
 The STATION table is described as follows:
 where LAT_N is the northern latitude and LONG_W is the western longitude.
 
-
+Question Link: https://www.hackerrank.com/challenges/weather-observation-station-6/problem?isFullScreen=true
 Solution: 
 /*
     Enter your query here and follow these instructions:
