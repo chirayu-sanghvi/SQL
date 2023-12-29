@@ -1,6 +1,11 @@
 Station Table:
 
-  
+  Field         Type
+  ID            Number
+  CITY          VARCHAR2(21)
+  STATE         VARCHAR2(2)
+  LAT_N         NUMBER
+  LONG_W        NUMBER
 
 1) Query the following two values from the STATION table:
 
