@@ -1,5 +1,13 @@
+CITY table
 
+  Field          Type
+  ID            NUMBER
+  NAME          VARCHAR2(17)
+  COUNTRYCODE   VARCHAR2(3)
+  DISTRICT      VARCHAR2(20)
+  POPULATION    NUMBER
 
+  ========================================================================
 1) Query a count of the number of cities in CITY having a Population larger than .
   
 select count(*) from city 
@@ -17,4 +25,13 @@ select AVG(POPULATION) from city where district = 'California';
 
 select FLOOR(AVG(POPULATION)) from city;
 ========================================
-5)
+5) Query the sum of the populations for all Japanese cities in CITY. The COUNTRYCODE for Japan is JPN
+
+select sum(POPULATION) from city where countrycode = 'jpn';
+========================================
+6) Query the difference between the maximum and minimum populations in CITY.
+
+  select Max(population) - Min(population) from city;
+=========================================
+
+  
