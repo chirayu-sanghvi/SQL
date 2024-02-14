@@ -30,6 +30,15 @@ SELECT
 FROM patients
   JOIN province_names ON province_names.province_id = patients.province_id;
 
+-- 4) Show how many patients have a birth_date with 2010 as the birth year.
+SELECT COUNT(*) AS total_patients
+FROM patients
+WHERE YEAR(birth_date) = 2010;
+
+-- OR
+SELECT count(*) from patients where birth_date like '2010%';
+
+
 -- province_name is a new table whose schema is as follows (province_id, province_names)
 
 
