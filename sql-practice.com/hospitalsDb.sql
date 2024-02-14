@@ -18,3 +18,18 @@ weight	INT
 UPDATE patients
 SET allergies = 'NKA'
 WHERE allergies IS NULL;
+
+-- 2) Show first name and last name concatinated into one column to show their full name.
+SELECT Concat(first_name, " ", last_name) as fullname from  patients;
+
+-- 3) Show first name, last name, and the full province name of each patient. Example: 'Ontario' instead of 'ON'
+SELECT
+  first_name,
+  last_name,
+  province_name
+FROM patients
+  JOIN province_names ON province_names.province_id = patients.province_id;
+
+-- province_name is a new table whose schema is as follows (province_id, province_names)
+
+
