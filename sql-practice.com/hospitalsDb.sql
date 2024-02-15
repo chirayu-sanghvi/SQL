@@ -64,5 +64,5 @@ primary key icon	attending_doctor_id	INT
 -- 7) Show the total number of admissions
 select count(*) from admissions;
 
-
+-- All Easy question for this database are completed, now we will do medium level questions
 
