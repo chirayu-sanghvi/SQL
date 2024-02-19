@@ -126,4 +126,97 @@ SELECT  first_name from patients order by len(first_name) , first_name ASC;
       AND len(patient_id) = 3
     )
 
+-- 19. For every admission, display the patient's full name, their admission diagnosis, and their doctor's full name who diagnosed their problem.
+  select concat(p.first_name," ",p.last_name) as patient_name, a.diagnosis, concat(d.first_name," ",d.last_name) as doctor_name
+  from patients p join admissions a using(patient_id) join doctors d on a.attending_doctor_id = d.doctor_id;
 
+-- OR
+  SELECT
+    CONCAT(patients.first_name, ' ', patients.last_name) as patient_name,
+    diagnosis,
+    CONCAT(doctors.first_name,' ',doctors.last_name) as doctor_name
+  FROM patients
+    JOIN admissions ON admissions.patient_id = patients.patient_id
+    JOIN doctors ON doctors.doctor_id = admissions.attending_doctor_id;
+
+-- 20. Show first_name, last_name, and the total number of admissions attended for each doctor. Every admission has been attended by a doctor.
+  select first_name, last_name, count(*) as adminssion_total from doctors join admissions on doctors.doctor_id = admissions.attending_doctor_id group by doctor_id;
+-- OR
+  SELECT
+  first_name,
+  last_name,
+  count(*) as admissions_total
+  from admissions a
+    join doctors ph on ph.doctor_id = a.attending_doctor_id
+  group by attending_doctor_id
+
+-- 21. For each doctor, display their id, full name, and the first and last admission date they attended.
+  select doctor_id, concat(first_name," ", last_name) as full_name, Min(admission_date), Max(admission_date)
+  from doctors d join admissions a on d.doctor_id = a.attending_doctor_id group by doctor_id;
+-- OR
+  select
+  doctor_id,
+  first_name || ' ' || last_name as full_name,
+  min(admission_date) as first_admission_date,
+  max(admission_date) as last_admission_date
+  from admissions a
+    join doctors ph on a.attending_doctor_id = ph.doctor_id
+  group by doctor_id;
+
+-- 22. Display the total amount of patients for each province. Order by descending.
+  select province_name, count(*) patient_count from patients join province_names using(province_id) group by province_name order by patient_count desc;
+
+-- OR
+  SELECT
+  province_name,
+  COUNT(*) as patient_count
+  FROM patients pa
+    join province_names pr on pr.province_id = pa.province_id
+  group by pr.province_id
+  order by patient_count desc;
+
+-- 23. display the first name, last name and number of duplicate patients based on their first name and last name.
+-- Ex: A patient with an identical name can be considered a duplicate.
+  select first_name, last_name, count(*) as num_of_duplicates from patients group by first_name,last_name having count(*) > 1;
+
+/*
+-- 24. Display patient's full name,
+height in the units feet rounded to 1 decimal,
+weight in the unit pounds rounded to 0 decimals,
+birth_date,
+gender non abbreviated.
+
+Convert CM to feet by dividing by 30.48.
+Convert KG to pounds by multiplying by 2.205.
+*/
+  select first_name || " " || last_name, Round(height/30.48, 1), round(weight*2.205, 0), birth_date,
+  case 
+  	when gender='M' Then 'MALE'
+      when gender='F' then 'FEMALE'
+  END AS gender_type
+  from patients;
+
+-- OR 
+  select
+      concat(first_name, ' ', last_name) AS 'patient_name', 
+      ROUND(height / 30.48, 1) as 'height "Feet"', 
+      ROUND(weight * 2.205, 0) AS 'weight "Pounds"', birth_date,
+  CASE
+  	WHEN gender = 'M' THEN 'MALE' 
+    ELSE 'FEMALE' 
+  END AS 'gender_type'
+  from patients
+
+-- 25. Show patient_id, first_name, last_name from patients whose does not have any records in the admissions table. (Their patient_id does not exist in any admissions.patient_id rows.)
+  select patient_id, first_name, last_name from patients Left outer join admissions using(patient_id) where admissions.patient_id is NULL;
+
+-- OR
+  SELECT
+  patients.patient_id,
+  first_name,
+  last_name
+  from patients
+  where patients.patient_id not in (
+      select admissions.patient_id
+      from admissions
+  )
