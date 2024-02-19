@@ -83,4 +83,47 @@ SELECT  first_name from patients order by len(first_name) , first_name ASC;
 -- 12. Show all patient's first_name, last_name, and birth_date who were born in the 1970s decade. Sort the list starting from the earliest birth_date.
   select first_name, last_name, birth_date from patients where year(birth_date) between 1970 and 1979 order by birth_date;
 
--- 13. 
+-- 13. We want to display each patient's full name in a single column. Their last_name in all upper letters must appear first, then first_name in all lower case letters. 
+-- Separate the last_name and first_name with a comma. Order the list by the first_name in decending order. EX: SMITH,jane
+  select concat(upper(last_name),",",lower(first_name)) as new_name_format from patients order by first_name desc;
+
+-- OR
+  SELECT
+    UPPER(last_name) || ',' || LOWER(first_name) AS new_name_format
+  FROM patients
+  ORDER BY first_name DESC;
+
+-- 14. Show the province_id(s), sum of height; where the total sum of its patient's height is greater than or equal to 7,000.
+  select province_id, sum(height) as sum_height from patients group by province_id having sum_height >= 7000;
+-- OR
+  select * from (select province_id, SUM(height) as sum_height FROM patients group by province_id) where sum_height >= 7000;
+
+-- 15. Show the difference between the largest weight and smallest weight for patients with the last name 'Maroni'
+  select Max(weight) - MIn(weight) as weight_data from patients where last_name='Maroni';
+
+-- 16. Show all of the days of the month (1-31) and how many admission_dates occurred on that day. Sort by the day with most admissions to least admissions.
+  select day(admission_date) as day_number , count(*) as number_of_admissions from admissions group by day(admission_date) order by number_of_admissions desc;
+
+-- 17. Show all columns for patient_id 542's most recent admission_date.
+  select * from admissions where patient_id = 542 order by admission_date desc limit 1;
+
+-- 18. Show patient_id, attending_doctor_id, and diagnosis for admissions that match one of the two criteria:
+-- 1. patient_id is an odd number and attending_doctor_id is either 1, 5, or 19.
+-- 2. attending_doctor_id contains a 2 and the length of patient_id is 3 characters.
+  SELECT
+    patient_id,
+    attending_doctor_id,
+    diagnosis
+  FROM admissions
+  WHERE
+    (
+      attending_doctor_id IN (1, 5, 19)
+      AND patient_id % 2 != 0
+    )
+    OR 
+    (
+      attending_doctor_id LIKE '%2%'
+      AND len(patient_id) = 3
+    )
+
+
